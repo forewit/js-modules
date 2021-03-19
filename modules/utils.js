@@ -1,13 +1,12 @@
-(function (root, factory) {
-    if (typeof exports === 'object') {
-        module.exports = factory();
-    } else if (typeof define === 'function' && define.amd) {
-        define([], factory);
-    } else {
-        root.utils = factory();
-    }
-}(this, function () {
+/**
+ * Utils is a collection of useful standalone functions
+ */
 
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+        typeof define === 'function' && define.amd ? define(['exports'], factory) :
+            (global = global || self, factory(global.utils = {}));
+}(this, (function (exports) {
     'use strict';
 
     // Returns a function, that, when invoked, will only be triggered at most once
@@ -15,7 +14,7 @@
     // as much as it can, without ever going more than once per `wait` duration;
     // but if you'd like to disable the execution on the leading edge, pass
     // `{leading: false}`. To disable execution on the trailing edge, ditto.
-    export function throttle(func, wait, options) {
+    function throttle(func, wait, options) {
         var context, args, result;
         var timeout = null;
         var previous = 0;
@@ -46,4 +45,8 @@
             return result;
         };
     };
-}));
+
+    exports.throttle = throttle;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+})));

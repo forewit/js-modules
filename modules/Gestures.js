@@ -1,37 +1,34 @@
 /**
  * Gestures.js -- a class to track gestures using mouse and touch
  * event handlers. Track gestures on an element by using new Gestures(element)
+ *
+ * Gestures are defined by strings with combinations of the 
+ * following (separated by spaces): 
  * 
- * MOUSE GESTURES:
- * click
- * doubleClick
- * longClick
- * rightClick
- * wheel
- * mouseDragStart
- * mouseDragging
- * mouseDragEnd
+ *      click
+ *      doubleClick
+ *      longClick
+ *      rightClick
+ *      wheel
+ *      mouseDragStart
+ *      mouseDragging
+ *      mouseDragEnd
+ *      tap
+ *      longPress
+ *      doubleTap
+ *      touchDragStart
+ *      touchDragging
+ *      touchDragEnd
+ *      pinchStart
+ *      pinching
+ *      pinchEnd
+ *      blur
  * 
- * TOUCH GESTURES:
- * tap
- * longPress
- * doubleTap
- * touchDragStart
- * touchDragging
- * touchDragEnd
- * pinchStart
- * pinching
- * pinchEnd
- * 
- * OTHER GESTURES:
- * blur
- * 
- * METHODS:
- * on('gesture name(s)', callback)  Adds callbacks to the listed gestures
- * off('gesture names')             Removes callbacks from the listed gestures
- * clear()                          Clears all callbacks for all gestures
- * start()                          starts tracking gestures on the element
- * stop()                           pauses tracking gestures on the element
+ * on(gestures, callback)   Adds a callback to the listed gestures
+ * off(gestures)            Removes callbacks from the listed gestures
+ * clear()                  Clears all callbacks for all gestures
+ * start()                  starts tracking gestures on the element
+ * stop()                   pauses tracking gestures on the element
  */
 
 (function (root, factory) {
@@ -48,9 +45,9 @@
 
     // PREFERENCES
     const LONG_PRESS_DELAY = 500;
-    const DOUBLE_TAP_DELAY = 100;
+    const DOUBLE_TAP_DELAY = 300; // reduce to 100 to remove double taps
     const LONG_CLICK_DELAY = 500;
-    const DOUBLE_CLICK_DELAY = 100;
+    const DOUBLE_CLICK_DELAY = 300; // reduce to 100 to remove double taps
 
     function noop() { };
 
@@ -62,7 +59,7 @@
         }
     }
 
-    export class Gestures {
+    class Gestures {
         constructor(element) {
             // STATE MANAGEMENT 
             this.elm = element;
@@ -357,4 +354,6 @@
             }
         }
     }
+
+    return Gestures;
 }));
