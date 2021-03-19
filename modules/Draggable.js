@@ -9,18 +9,17 @@
         root.Draggable = factory();
     }
 }(this, function () {
-
     'use strict';
-    class Draggable {
-        static noop() { };
 
-        static copyTouch(touch) {
-            return { identifier: touch.identifier, x: touch.pageX, y: touch.pageY };
-        }
+    function copyTouch(touch) {
+        return { identifier: touch.identifier, x: touch.pageX, y: touch.pageY };
+    }
+    function noop() {}
+
+    class Draggable {
 
         constructor(element, options) {
             if (!options) options = {};
-            let noop = function () { };
 
             // set attributes
             this.elm = element;
@@ -62,7 +61,7 @@
                 me.handle.addEventListener('touchmove', me.moveHandler, { passive: false });
                 me.handle.addEventListener('touchend', me.endHandler);
                 me.handle.addEventListener('touchcancel', me.endHandler);
-                me.pointer = Draggable.copyTouch(e.targetTouches[0]);
+                me.pointer = copyTouch(e.targetTouches[0]);
                 e.preventDefault();
                 e.stopPropagation();
             }
@@ -77,7 +76,7 @@
         moveHandle(e) {
             var me = this;
 
-            // first run
+            // executes only once
             if (!me.dragging) {
                 // start dragging
                 me.elm.after(me.placeholder);       // insert placeholder
@@ -98,7 +97,7 @@
             // update pointer
             me.pointer = (e.type == 'mousemove')
                 ? { x: e.pageX, y: e.pageY }
-                : Draggable.copyTouch(e.targetTouches[0]);
+                : copyTouch(e.targetTouches[0]);
 
             e.preventDefault();
             e.stopPropagation();
