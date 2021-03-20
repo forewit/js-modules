@@ -1,21 +1,35 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <div id="testing-div" style="height: 100px; width: 100px; background: coral;"></div>
-    <div style="height: 2000px; background: cornsilk;"></div>
-    
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div
+      id="testing-div"
+      style="height: 100px; width: 100px; background: coral"
+    ></div>
+
+    <div id="drop-region">
+        <div class="drop-message">
+            Drag & Drop images or click to upload
+        </div>
+        <div id="image-preview"></div>
+    </div>
+
+    <div style="height: 2000px; background: cornsilk"></div>
+
     <!-- modules -->
     <script src="modules/Gestures.js"></script>
     <script src="modules/keys.js"></script>
     <script src="modules/utils.js"></script>
     <script src="modules/Draggable.js"></script>
+    <script src="modules/files.js"></script>
+
 
     <!-- testing script -->
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

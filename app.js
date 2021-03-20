@@ -11,3 +11,14 @@ gestures.start();
 
 // testing Draggable.js
 new Draggable(elm);
+
+// testing files.js
+//files.newDropZone(document.getElementById('drop-region'));
+
+let dropzone = document.getElementById('drop-region');
+new files.Dropzone(
+    dropzone, 
+    dropzone, 
+    ()=>{console.log('callback')},
+    {hoverClass:"dragover"}
+);
