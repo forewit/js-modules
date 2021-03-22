@@ -68,11 +68,11 @@
             this.hypo = undefined;
             this.taps = 0;
             this.lastTouchEndTime = 0;
-            this.touch = { identifier: undefined };
+            this.touch = { identifier: undefined, x: 0, y: 0 };
             this.mouseMoving = false;
             this.clicks = 0;
             this.mouseupTime = 0;
-            this.mouse = {};
+            this.mouse = { down: false, x: 0, y: 0 };
             this.callbacks = {};
 
             // clear all callbacks
@@ -156,6 +156,7 @@
             window.removeEventListener('mouseup', me.mouseupHandler);
     
             me.mouseupTime = new Date();
+            me.mouse.down = false;
     
             if (me.mouseMoving) {
                 // MOUSE DRAG END DETECTION
@@ -185,7 +186,10 @@
     
             window.addEventListener('mousemove', me.mousemoveHandler, { passive: false });
             window.addEventListener('mouseup', me.mouseupHandler);
-            me.mouse = { x: e.clientX, y: e.clientY };
+
+            me.mouse.down = true;
+            me.mouse.x = e.clientX;
+            me.mouse.y = e.clientY;
     
             // LONGCLICK DETECTION
             window.setTimeout(function () {
@@ -209,8 +213,9 @@
     
             me.mouseMoving = true;
     
-            me.mouse = { x: e.clientX, y: e.clientY };
-    
+            me.mouse.x = e.clientX;
+            me.mouse.y = e.clientY;
+
             // MOUUSE DRAGGING DETECTION
             me.callbacks.mouseDragging(me.mouse);
         }
@@ -222,6 +227,7 @@
             window.removeEventListener('mouseup', me.mouseupHandler);
     
             me.mouseupTime = new Date();
+            me.mouse.down = false;
     
             if (!me.mouseMoving) {
                 // RIGHT CLICK DETECTION

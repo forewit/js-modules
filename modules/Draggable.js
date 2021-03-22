@@ -14,7 +14,7 @@
     function copyTouch(touch) {
         return { identifier: touch.identifier, x: touch.pageX, y: touch.pageY };
     }
-    function noop() {}
+    function noop() { }
 
     class Draggable {
 
@@ -41,11 +41,26 @@
             this.startHandler = this.startHandle.bind(this);
             this.moveHandler = this.moveHandle.bind(this);
             this.endHandler = this.endHandle.bind(this);
+            this.blurHandler = this.blurHandle.bind(this);
 
             // add event listeners
             var me = this;
             me.handle.addEventListener('touchstart', me.startHandler, { passive: false });
             me.handle.addEventListener('mousedown', me.startHandler);
+            window.addEventListener('blur', me.blurHandler);
+        }
+
+        blurHandle(e) {
+            var me = this;
+
+            // remove event listeners
+            window.removeEventListener('mousemove', me.moveHandler);
+            window.removeEventListener('mouseup', me.endHandler);
+            me.handle.removeEventListener('touchmove', me.moveHandler);
+            me.handle.removeEventListener('touchend', me.endHandler);
+            me.handle.removeEventListener('touchcancel', me.endHandler);
+
+            me.stopDragging();
         }
 
         startHandle(e) {
@@ -83,7 +98,7 @@
                 document.body.appendChild(me.elm);  // move elm to body
                 me.elm.style.position = "absolute";
                 me.dragging = true;
-                
+
                 // prevent iFrames from stealing pointer events
                 var frames = document.getElementsByTagName('iframe');
                 for (var i = 0; i < frames.length; i++) {
@@ -124,16 +139,20 @@
                 return;
             }
 
+            me.stopDragging();
+        }
+
+        stopDragging() {
             // restore state
-            me.placeholder.after(me.elm);
-            me.placeholder.remove();
-            me.elm.style.position = "";
+            this.placeholder.after(this.elm);
+            this.placeholder.remove();
+            this.elm.style.position = "";
 
             // callback
-            me.handlers.onEnd(me);
+            this.handlers.onEnd(this);
 
             // cleanup
-            me.dragging = false;
+            this.dragging = false;
             // allow iframes to steal pointer events again
             var frames = document.getElementsByTagName('iframe');
             for (var i = 0; i < frames.length; i++) {
