@@ -61,7 +61,7 @@
 
     class Gestures {
         constructor(element) {
-            // STATE MANAGEMENT 
+            // STATE MANAGEMENT
             this.elm = element;
             this.dragging = false;
             this.pinching = false;
