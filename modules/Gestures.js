@@ -256,10 +256,10 @@
             e.preventDefault();
             e.stopPropagation();
     
-            // check if two touches were started simultaneously
+            // don't handle multiple touches if already tracking a touch
             if (e.targetTouches.length > 1) {
-                if (e.targetTouches[0] == me.touch.identifier) return;
-                else me.pinching = true;
+                if (e.targetTouches[0].identifier == me.touch.identifier) return; 
+                me.pinching = true;
             }
     
             window.addEventListener('touchmove', me.touchmoveHandler, { passive: false });

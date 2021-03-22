@@ -15,6 +15,10 @@ spacerGestures.on('pinching', ()=>{console.log('pinching'); spacer.innerHTML="pi
 spacerGestures.on('touchDragStart', ()=>{console.log('touch drag start'); spacer.innerHTML="touch drag start"})
 spacerGestures.on('touchDragging', ()=>{console.log('touch dragging'); spacer.innerHTML="touch dragging"})
 spacerGestures.on('touchDragEnd', ()=>{console.log('touch drag end'); spacer.innerHTML="touch drag end"})
+spacerGestures.on('longPress', ()=>{console.log('longPress'); spacer.innerHTML="longPress"})
+spacerGestures.on('tap', ()=>{console.log('tap'); spacer.innerHTML="tap"})
+spacerGestures.on('doubleTap', ()=>{console.log('double tap'); spacer.innerHTML="double tap"})
+
 
 spacerGestures.start();
 
