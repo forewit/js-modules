@@ -273,7 +273,7 @@
             // update primary touch location
             me.touch = copyTouch(e.targetTouches[0]);
     
-            // LONGPRESS DETECTION
+            // longpress DETECTION
             window.setTimeout(function () {
                 // cancel long press if in the middle of a gesture
                 if (me.dragging || me.pinching) return;
