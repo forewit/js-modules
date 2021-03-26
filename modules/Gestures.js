@@ -14,7 +14,7 @@
  *      mouseDragging
  *      mouseDragEnd
  *      tap
- *      longPress
+ *      longpress
  *      doubleTap
  *      touchDragStart
  *      touchDragging
@@ -65,6 +65,7 @@
             this.elm = element;
             this.dragging = false;
             this.pinching = false;
+            this.longpressed = false;
             this.hypo = undefined;
             this.taps = 0;
             this.lastTouchEndTime = 0;
@@ -102,7 +103,10 @@
                 mouseDragEnd: noop,
                 // touch callbacks
                 tap: noop,
-                longPress: noop,
+                longpress: noop,
+                longpressDragStart: noop,
+                longpressDragging: noop,
+                longpressDragEnd: noop,
                 doubleTap: noop,
                 touchDragStart: noop,
                 touchDragging: noop,
@@ -277,14 +281,15 @@
                 // verify the touch hasn't been released
                 let now = new Date();
                 if (now - me.lastTouchEndTime >= LONG_PRESS_DELAY) {
-                    window.removeEventListener('touchmove', me.touchmoveHandler);
-                    window.removeEventListener('touchend', me.touchendHandler);
-                    window.removeEventListener('touchcancel', me.touchendHandler);
+                    //window.removeEventListener('touchmove', me.touchmoveHandler);
+                    //window.removeEventListener('touchend', me.touchendHandler);
+                    //window.removeEventListener('touchcancel', me.touchendHandler);
                     me.dragging = false;
                     me.pinching = false;
                     me.hypo = undefined;
+                    me.longpressed = true;
     
-                    me.callbacks.longPress(me.touch);
+                    me.callbacks.longpress(me.touch);
                 }
             }, LONG_PRESS_DELAY);
         }
@@ -297,10 +302,10 @@
     
             if (me.dragging) {
                 me.touch = copyTouch(e.targetTouches[0]);
-                me.callbacks.touchDragging(me.touch);
+                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch) : me.callbacks.touchDragging(me.touch);
                 return;
     
-            } else if (me.pinching || e.targetTouches.length > 1) {
+            } else if (!me.longpressed && (me.pinching || e.targetTouches.length > 1)) {
                 me.touch = copyTouch(e.targetTouches[0]);
                 let touch2 = copyTouch(e.targetTouches[1]);
                 let center = {
@@ -321,8 +326,10 @@
             } else {
                 me.dragging = true;
                 me.callbacks.touchDragStart(me.touch);
+
+                (me.longpressed) ?  me.callbacks.longpressDragStart(me.touch) : me.callbacks.touchDragStart(me.touch);
                 me.touch = copyTouch(e.targetTouches[0]);
-                me.callbacks.touchDragging(me.touch);
+                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch) : me.callbacks.touchDragging(me.touch);
             }
         }
     
@@ -342,12 +349,12 @@
     
             if (me.dragging) {
                 me.dragging = false;
-                me.callbacks.touchDragEnd();
+                (me.longpressed) ?  me.callbacks.longpressDragEnd() : me.callbacks.touchDragEnd();
             } else if (me.pinching) {
                 me.pinching = false;
                 me.hypo = undefined;
                 me.callbacks.pinchEnd()
-            } else {
+            } else if (!me.longpressed) {
                 // TAP DETECTION
                 if (me.taps == 0) me.callbacks.tap(me.touch);
     
@@ -358,6 +365,8 @@
                     me.taps = 0;
                 }, DOUBLE_TAP_DELAY);
             }
+
+            me.longpressed = false;
         }
     }
 
