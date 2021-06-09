@@ -5,24 +5,27 @@
  * Multiple gesture callbacks can be set using a space-separated string
  * using the following supported options:
  * 
- *      click
- *      doubleClick
- *      longClick
- *      rightClick
- *      wheel
- *      mouseDragStart
- *      mouseDragging
- *      mouseDragEnd
- *      tap
- *      longpress
- *      doubleTap
- *      touchDragStart
- *      touchDragging
- *      touchDragEnd
- *      pinchStart
- *      pinching
- *      pinchEnd
+ *      mouseDragEnd 		-> point
  *      blur
+ *      wheel 			    -> point, event
+ *      click			    -> point
+ *      rightClick		    -> point
+ *      longClick 		    -> point
+ *      doubleClick		    -> point
+ *      mouseDragStart		-> point
+ *      mouseDragEnd		-> point
+ *      longpress		    -> point
+ *      longpressDragStart	-> point
+ *      longpressDragging	-> point
+ *      longpressDragEnd
+ *      touchDragStart		-> point
+ *      touchDragging		-> point
+ *      touchDragEnd
+ *      pinchStart		    -> point
+ *      pinching		    -> point, scale
+ *      pinchEnd
+ *      tap			        -> point
+ *      doubleTap		    -> point
  * 
  * on(gestures, callback)   Adds a callback to the listed gestures. Example:
  *                              on("click tap", (pointer)=>{console.log(pointer.x, pointer.y)})
@@ -177,7 +180,7 @@
             let point = { x: e.clientX, y: e.clientY };
     
             // WHEEL DETECTION
-            this.callbacks.wheel(point, e.deltaY);
+            this.callbacks.wheel(point, e);
     
             e.preventDefault();
             e.stopPropagation();
