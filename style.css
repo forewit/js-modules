@@ -14,7 +14,6 @@
 #drop-region.dragover {
     background: blue !important;
 }
-
 #image-preview {
 	margin-top:20px;
 }
@@ -38,7 +37,7 @@
     background: rgba(255,255,255,0.5);
 }
 
-#testing-div {
+#draggable {
 	height: 100px; 
 	width: 100px; 
 	background: coral
@@ -47,4 +46,9 @@
 	height: 100px;
 	width: 100px;
 	background-color: aquamarine;
+}
+
+#spacer {
+	height: 2000px; 
+	background: cornsilk;
 }

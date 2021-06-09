@@ -1,14 +1,10 @@
-let elm = document.getElementById('testing-div');
+let elm = document.getElementById('draggable');
 
 // testing keys.js
 keys.on('17 65', ()=>{console.log('ctrl + a')})
 keys.start()
 
 // testing Gestures.js
-let gestures = new Gestures(elm);
-gestures.on('doubleClick', ()=>{console.log('double click')});
-gestures.start();
-
 let spacer = document.getElementById('spacer');
 let spacerGestures = new Gestures(spacer);
 spacerGestures.on('pinching', ()=>{console.log('pinching'); spacer.innerHTML="pinching"})
