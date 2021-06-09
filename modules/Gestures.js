@@ -1,4 +1,7 @@
 /**
+ * TODO: change from individual callbacks to a listener?
+ * custom event "gesture" details: {name, x, y}
+ * 
  * Gestures.js -- a class to track mouse and touch gestures on an element
  * Initialize by using new Gestures(element)
  *
@@ -260,6 +263,8 @@
         }
     
         touchstartHandle(e) {
+            document.getElementById('spacer').innerHTML = e.targetTouches[0].identifier;
+
             var me = this;
 
             e.preventDefault();
@@ -339,6 +344,8 @@
         }
     
         touchendHandle(e) {
+            document.getElementById('spacer').innerHTML = e.targetTouches[0].identifier;
+
             var me = this;
 
             if (me.dragging &&

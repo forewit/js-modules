@@ -7,6 +7,7 @@ keys.start()
 // testing Gestures.js
 let spacer = document.getElementById('spacer');
 let spacerGestures = new Gestures(spacer);
+/*
 spacerGestures.on('pinching', ()=>{console.log('pinching'); spacer.innerHTML="pinching"})
 spacerGestures.on('touchDragging', ()=>{console.log('touch dragging'); spacer.innerHTML="touch dragging"})
 spacerGestures.on('touchDragEnd', ()=>{console.log('touch drag end'); spacer.innerHTML="touch drag end"})
@@ -21,6 +22,7 @@ spacerGestures.on('mouseDragging', ()=>{console.log('mouse dragging'); spacer.in
 spacerGestures.on('mouseDragEnd', ()=>{console.log('mouse drag end'); spacer.innerHTML="mouse drag end"})
 spacerGestures.on('longpressDragging', ()=>{console.log('longpress dragging'); spacer.innerHTML="longpress dragging"})
 spacerGestures.on('longpressDragEnd', ()=>{console.log('longpress drag end'); spacer.innerHTML="longpress drag end"})
+*/
 spacerGestures.start();
 
 // testing Draggable.js
