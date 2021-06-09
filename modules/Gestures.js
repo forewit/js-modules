@@ -1,9 +1,9 @@
 /**
- * Gestures.js -- a class to track gestures using mouse and touch
- * event handlers. Track gestures on an element by using new Gestures(element)
+ * Gestures.js -- a class to track mouse and touch gestures on an element
+ * Initialize by using new Gestures(element)
  *
- * Gestures are defined by strings with combinations of the 
- * following (separated by spaces): 
+ * Multiple gesture callbacks can be set using a space-separated string
+ * using the following supported options:
  * 
  *      click
  *      doubleClick
@@ -24,8 +24,10 @@
  *      pinchEnd
  *      blur
  * 
- * on(gestures, callback)   Adds a callback to the listed gestures
- * off(gestures)            Removes callbacks from the listed gestures
+ * on(gestures, callback)   Adds a callback to the listed gestures. Example:
+ *                              on("click tap", (pointer)=>{console.log(pointer.x, pointer.y)})
+ * off(gestures)            Removes callbacks from the listed gestures. Example: 
+ *                              off("click tap")
  * clear()                  Clears all callbacks for all gestures
  * start()                  starts tracking gestures on the element
  * stop()                   pauses tracking gestures on the element

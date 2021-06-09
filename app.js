@@ -20,16 +20,15 @@ spacerGestures.on('doubleTap', ()=>{console.log('double tap'); spacer.innerHTML=
 spacerGestures.on('click', ()=>{console.log('click'); spacer.innerHTML="click"})
 spacerGestures.on('doubleClick', ()=>{console.log('double click'); spacer.innerHTML="double click"})
 spacerGestures.on('longClick', ()=>{console.log('long click'); spacer.innerHTML="long click"})
+spacerGestures.on('rightClick', ()=>{console.log('right click'); spacer.innerHTML="right click"})
 spacerGestures.on('mouseDragging', ()=>{console.log('mouse dragging'); spacer.innerHTML="mouse dragging"})
 spacerGestures.on('mouseDragEnd', ()=>{console.log('mouse drag end'); spacer.innerHTML="mouse drag end"})
 spacerGestures.on('longpressDragging', ()=>{console.log('longpress dragging'); spacer.innerHTML="longpress dragging"})
 spacerGestures.on('longpressDragEnd', ()=>{console.log('longpress drag end'); spacer.innerHTML="longpress drag end"})
-
-
 spacerGestures.start();
 
 // testing Draggable.js
-new Draggable(elm);
+new Draggable(elm, {placeholderClass:"placeholder"});
 
 // testing files.js
 //files.newDropZone(document.getElementById('drop-region'));

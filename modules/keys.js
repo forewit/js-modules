@@ -3,7 +3,8 @@
  * of keycodes where the last key pressed is the last key in 
  * the shortcut. Find keycodes here: https://keycode.info/
  * 
- * keys.on(shortcut, callback)      adds a callback to a shortcut
+ * keys.on(shortcut, callback)      adds a callback to a shortcut. Example:
+ *                                      keys.on('17 65', (event)=>{console.log('ctrl + a', event)})
  * keys.off(shortcut)               removes the callback for a shortcut
  * keays.clear()                    clears all callbacks
  * keys.start()                     starts tracking key presses

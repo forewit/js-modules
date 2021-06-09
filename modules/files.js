@@ -1,4 +1,8 @@
-
+/**
+ * This module helps manage uploaded files.
+ * 
+ * new files.Dropzone(dropzone, clickzone, callback, options)   ->  class for creating a dropzone for drag-drop file support
+ */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
         typeof define === 'function' && define.amd ? define(['exports'], factory) :

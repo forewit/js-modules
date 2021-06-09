@@ -1,5 +1,7 @@
 /**
- * Utils is a collection of useful standalone functions
+ * Utils is a collection of useful standalone functions:
+ * 
+ * utils.throttle(func, wait, options)
  */
 
 (function (global, factory) {

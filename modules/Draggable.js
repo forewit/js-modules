@@ -1,4 +1,13 @@
-
+/**
+ * initialize with: new Draggable(elm, options) 
+ * 
+ * Available options:
+ * options.handle           ->      element that will be used as the draggable handle (elm is used if hanlde is undefined)
+ * options.onStart          ->      function that is called when dragging starts. passed parameters: self, x, y
+ * options.onMove           ->      function that is called on each move event. passed parameters: self, x, y
+ * options.onEnd            ->      function that is called when dragging ends. passed parameters: self
+ * options.placeholderClass ->      adds this css class to the placeholder object (which replaces elm in the DOM while dragging)
+ */
 
 (function (root, factory) {
     if (typeof exports === 'object') {
