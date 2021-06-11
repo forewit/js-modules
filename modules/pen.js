@@ -12,6 +12,7 @@
     Object.defineProperty(exports, '__esModule', { value: true });
 })));
 
+
 /*
 // move to the first point
 ctx.moveTo(points[0].x, points[0].y);
