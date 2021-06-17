@@ -35,4 +35,4 @@ new files.Dropzone(
 );
 
 // testing pen.js
-new pen(document.getElementById('pen'));
+new Pen(document.getElementById('pen'));

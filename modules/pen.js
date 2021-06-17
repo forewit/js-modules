@@ -1,8 +1,5 @@
 // Requires Gestures.js
 
-const Gestures = require("./Gestures");
-
-
 (function (root, factory) {
     if (typeof exports === 'object') {
         module.exports = factory();
@@ -27,9 +24,10 @@ const Gestures = require("./Gestures");
             me.gestures.start()
         }
 
-        dragHandler(point) {
+        dragHandler = utils.throttle((point)=>{
             console.log(point);
-        }
+
+        }, 200, {trailing: false})
     }
 
 
