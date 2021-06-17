@@ -1,4 +1,4 @@
-#drop-region {
+#files {
 	background-color: #fff;
 	border-radius:20px;
 	box-shadow:0 0 35px rgba(0,0,0,0.05);
@@ -8,10 +8,10 @@
 	cursor:pointer;
 	transition:.3s;
 }
-#drop-region:hover {
+#files:hover {
 	box-shadow:0 0 45px rgba(0,0,0,0.1);
 }
-#drop-region.dragover {
+#files.dragover {
     background: blue !important;
 }
 #image-preview {
@@ -48,7 +48,12 @@
 	background-color: aquamarine;
 }
 
-#spacer {
-	height: 2000px; 
+#gestures {
+	height: 200px; 
 	background: cornsilk;
+}
+
+#pen {
+	height: 200px; 
+	background: lightcoral;
 }

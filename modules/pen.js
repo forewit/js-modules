@@ -1,16 +1,40 @@
+// Requires Gestures.js
+
+const Gestures = require("./Gestures");
 
 
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-        typeof define === 'function' && define.amd ? define(['exports'], factory) :
-            (global = global || self, factory(global.keys = {}));
-}(this, (function (exports) {
+(function (root, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define([], factory);
+    } else {
+        root.Pen = factory();
+    }
+}(this, function () {
     'use strict';
 
+    class Pen {
+        constructor (element) {
+            var me = this;
+
+            // Attributes
+            me.elm = element;
+            me.gestures = new Gestures(me.elm);
+
+            // initialize
+            me.gestures.on('mouseDragging', me.dragHandler)
+            me.gestures.start()
+        }
+
+        dragHandler(point) {
+            console.log(point);
+        }
+    }
 
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-})));
+    return Pen;
+}));
 
 
 /*

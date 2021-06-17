@@ -6,7 +6,7 @@
  * Initialize by using new Gestures(element)
  *
  * Multiple gesture callbacks can be set using a space-separated string
- * using the following supported options:
+ * using the following supported options (point = {x, y}):
  * 
  *      mouseDragEnd 		-> point
  *      blur
@@ -16,6 +16,7 @@
  *      longClick 		    -> point
  *      doubleClick		    -> point
  *      mouseDragStart		-> point
+ *      mouseDragging       -> point
  *      mouseDragEnd		-> point
  *      longpress		    -> point
  *      longpressDragStart	-> point
