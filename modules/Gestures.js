@@ -1,5 +1,6 @@
 /**
  * TODO: change from individual callbacks to a listener?
+ * TODO: update return from "point" to x and y
  * custom event "gesture" details: {name, x, y}
  * 
  * Gestures.js -- a class to track mouse and touch gestures on an element
