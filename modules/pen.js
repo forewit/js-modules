@@ -22,7 +22,6 @@
             var me = this;
             if (!options) options = {};
 
-
             // Attributes
             me.lastPoint = {};
             me.height = 0;
@@ -36,7 +35,6 @@
             me.lineCap = (options.lineCap) ? options.lineCap : "round";
             me.strokeStyle = (options.strokeStyle) ? options.strokeStyle : "#000000";
             me.lineDash = (options.lineDash) ? options.lineDash : [];
-
 
             // bind handlers
             this.dragHandler = this.dragHandle.bind(this);
