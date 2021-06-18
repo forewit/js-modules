@@ -107,8 +107,8 @@
                         y: point.y + me.drawRadius * ((lastPoint.y - point.y) / denominator)
                     }
 
-                    // maybe remove? prevents spikes when doing sharp turns
-                    if (dist(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y) <= 1) return;
+                    // TODO: maybe remove? prevents spikes when doing sharp turns
+                    if (dist(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y) <= 0.1) return;
 
                     me.points.push(newPoint);
                 }
@@ -154,7 +154,7 @@
             me.ctx.beginPath();
             me.ctx.lineWidth = 2;
             me.ctx.strokeStyle = "#2D9BF0";
-            me.ctx.setLineDash([3, 7]);
+            me.ctx.setLineDash([1, 3]);
             me.ctx.arc(me.points[me.points.length - 1].x, me.points[me.points.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
             me.ctx.closePath();
             me.ctx.stroke();
