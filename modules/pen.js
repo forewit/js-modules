@@ -24,8 +24,7 @@
 
 
             // Attributes
-            me.points = [];
-            me.pointer = {};
+            me.lastPoint = {};
             me.height = 0;
             me.width = 0;
             me.dpi = window.devicePixelRatio;
@@ -41,84 +40,78 @@
 
             // bind handlers
             this.dragHandler = this.dragHandle.bind(this);
-
+            this.startHandler = this.startHandle.bind(this);
 
             // initialize 
-            me.gestures.on('mouseDragStart touchDragStart', () => { me.points = []; });
+            me.gestures.on('mouseDragStart touchDragStart', me.startHandler);
             me.gestures.on('mouseDragging touchDragging', me.dragHandler);
             me.gestures.start();
             me.resize();
+        }
 
-
-            // ********** render loop *************
-            var FPS = 0;
-            var ticks = 0;
-            var lastFPS = 0;
-
-            function loop(delta) {
-                requestAnimationFrame(loop);
-                var perSec = delta / 1000;
-
-                // do stuff
-                me.render();
-
-                // FPS counter
-                var now = Date.now();
-                if (now - lastFPS >= 1000) {
-                    lastFPS = now;
-                    FPS = ticks;
-                    ticks = 0;
-                }
-                ticks++;
+        screenToCanvas(point) {
+            // adjust for DPI & offset
+            let rect = this.elm.getBoundingClientRect();
+            return {
+                x: (point.x + rect.left) * this.dpi,
+                y: (point.y - rect.top) * this.dpi
             }
-            requestAnimationFrame(loop);
-            // ************************************
+        }
+
+        startHandle(point) {
+            var me = this;
+            
+            // clear context
+            me.ctx.resetTransform();
+            me.ctx.clearRect(0, 0, me.width, me.height);
+
+            // set path properties
+            me.ctx.lineWidth = me.lineWidth;
+            me.ctx.lineCap = me.lineCap;
+            me.ctx.strokeStyle = me.strokeStyle;
+            me.ctx.setLineDash(me.lineDash);
+
+            // start path
+            me.ctx.beginPath()
+            me.lastPoint = me.screenToCanvas(point)
+            me.ctx.moveTo(me.lastPoint.x, me.lastPoint.y);
         }
 
         dragHandle(point) {
             var me = this;
 
-            
-            // adjust for DPI & offset
-            let rect = me.elm.getBoundingClientRect();
-            point.x += rect.left;
-            point.y -= rect.top;
-            point.x *= me.dpi;
-            point.y *= me.dpi;
+            let newPoint = me.screenToCanvas(point);
 
 
-            me.pointer.x = point.x;
-            me.pointer.y = point.y;
+            // if using a drawing circle
+            if (me.drawRadius > 0) {
+                // do nothing if point is inside the drawing circle
+                if (dist(newPoint.x, newPoint.y, me.lastPoint.x, me.lastPoint.y) <= me.drawRadius) return;
 
-            me.points.push({ x: point.x, y: point.y });
-
-            /*
-            // ensure minimum separation between the last point and the new one
-            if (me.points.length > 0) {
-                let lastPoint = me.points[me.points.length - 1];
-
-                var distance = dist(point.x, point.y, lastPoint.x, lastPoint.y);
-
-                if (distance >= me.drawRadius) {
-                    // see: https://math.stackexchange.com/questions/127613/closest-point-on-circle-edge-from-point-outside-inside-the-circle
-                    // A = point
-                    // B = lastPoint
-                    // r = drawRadius
-                    let denominator = Math.sqrt(point.x * point.x + point.y * point.y - 2 * point.x * lastPoint.x + lastPoint.x * lastPoint.x - 2 * point.y * lastPoint.y + lastPoint.y * lastPoint.y)
-                    let newPoint = {
-                        x: point.x + me.drawRadius * ((lastPoint.x - point.x) / denominator),
-                        y: point.y + me.drawRadius * ((lastPoint.y - point.y) / denominator)
-                    }
-
-                    // TODO: maybe remove? prevents spikes when doing sharp turns
-                    if (dist(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y) <= 0.1) return;
-
-                    me.points.push(newPoint);
+                // draw if the point is outside the drawing circle
+                // see: https://math.stackexchange.com/questions/127613/closest-point-on-circle-edge-from-point-outside-inside-the-circle
+                // A = point
+                // B = lastPoint
+                // r = drawRadius
+                let denominator = Math.sqrt(newPoint.x * newPoint.x + newPoint.y * newPoint.y - 2 * newPoint.x * me.lastPoint.x + me.lastPoint.x * me.lastPoint.x - 2 * newPoint.y * me.lastPoint.y + me.lastPoint.y * me.lastPoint.y)
+                let temp = {
+                    x: newPoint.x + me.drawRadius * ((me.lastPoint.x - newPoint.x) / denominator),
+                    y: newPoint.y + me.drawRadius * ((me.lastPoint.y - newPoint.y) / denominator)
                 }
-            } else {
-                me.points.push({ x: point.x, y: point.y });
+                newPoint = temp;
+
+                // prevent jagged lines by checking if the distance between points is <= 1
+                if (dist(me.lastPoint.x, me.lastPoint.y, newPoint.x, newPoint.y) <= 0.1) return;
             }
-            */
+
+            // curve to the new point
+            var xc = (me.lastPoint.x + newPoint.x) / 2;
+            var yc = (me.lastPoint.y + newPoint.y) / 2;
+            me.ctx.quadraticCurveTo(me.lastPoint.x, me.lastPoint.y, xc, yc);
+
+            me.lastPoint = newPoint;
+            me.ctx.stroke();
+            console.log(me.lastPoint);
         }
 
         resize() {
@@ -133,10 +126,10 @@
             //the + prefix casts it to an integer
             //the slice method gets rid of "px"
             let style_height = +getComputedStyle(me.elm).getPropertyValue("height").slice(0, -2);
-            
+
             //get CSS width
             let style_width = +getComputedStyle(me.elm).getPropertyValue("width").slice(0, -2);
-            
+
             // calculate new height & width
             me.height = style_height * me.dpi;
             me.width = style_width * me.dpi;
@@ -145,49 +138,6 @@
             me.elm.setAttribute('height', me.height);
             me.elm.setAttribute('width', me.width);
         }
-
-        render() {
-            var me = this;
-
-            if (me.points.length == 0) return;
-            let simplified = simplify(me.points, 2);
-
-            // clear context
-            me.ctx.clearRect(0, 0, me.width, me.height);
-
-            // draw circle around the last point
-            me.ctx.beginPath();
-            me.ctx.lineWidth = 2;
-            me.ctx.strokeStyle = "#2D9BF0";
-            me.ctx.setLineDash([1, 3]);
-            me.ctx.arc(simplified[simplified.length - 1].x, simplified[simplified.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
-            me.ctx.closePath();
-            me.ctx.stroke();
-
-            // draw curves between all points
-            me.ctx.beginPath()
-            me.ctx.lineWidth = me.lineWidth;
-            me.ctx.lineCap = me.lineCap;
-            me.ctx.strokeStyle = me.strokeStyle;
-            me.ctx.setLineDash(me.lineDash);
-
-            if (simplified.length > 2) {
-                // move to the first point
-                me.ctx.moveTo(simplified[0].x, simplified[0].y);
-
-                // curve through the middle points
-                for (var i = 1; i < simplified.length - 2; i++) {
-                    var xc = (simplified[i].x + simplified[i + 1].x) / 2;
-                    var yc = (simplified[i].y + simplified[i + 1].y) / 2;
-                    me.ctx.quadraticCurveTo(simplified[i].x, simplified[i].y, xc, yc);
-                }
-
-                // curve through the last two points
-                me.ctx.quadraticCurveTo(simplified[i].x, simplified[i].y, simplified[i + 1].x, simplified[i + 1].y);
-            }
-            me.ctx.stroke();
-        }
-
     }
 
     return Pen;
