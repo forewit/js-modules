@@ -90,6 +90,9 @@
             me.pointer.x = point.x;
             me.pointer.y = point.y;
 
+            me.points.push({ x: point.x, y: point.y });
+
+            /*
             // ensure minimum separation between the last point and the new one
             if (me.points.length > 0) {
                 let lastPoint = me.points[me.points.length - 1];
@@ -115,6 +118,7 @@
             } else {
                 me.points.push({ x: point.x, y: point.y });
             }
+            */
         }
 
         resize() {
@@ -146,8 +150,7 @@
             var me = this;
 
             if (me.points.length == 0) return;
-            let simplified = simplify(me.points, 1);
-            console.log(simplified);
+            let simplified = simplify(me.points, 2);
 
             // clear context
             me.ctx.clearRect(0, 0, me.width, me.height);
