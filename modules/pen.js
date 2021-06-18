@@ -25,14 +25,18 @@
 
             // Attributes
             me.points = [];
+            me.pointer = {};
+            me.height = 0;
+            me.width = 0;
+            me.dpi = window.devicePixelRatio;
             me.elm = element;
             me.ctx = me.elm.getContext("2d");
             me.gestures = new Gestures(me.elm);
-            me.rect = me.elm.getBoundingClientRect();
             me.drawRadius = (options.drawRadius) ? options.drawRadius : 10;
             me.lineWidth = (options.lineWidth) ? options.lineWidth : 5;
             me.lineCap = (options.lineCap) ? options.lineCap : "round";
             me.strokeStyle = (options.strokeStyle) ? options.strokeStyle : "#000000";
+            me.lineDash = (options.lineDash) ? options.lineDash : [];
 
 
             // bind handlers
@@ -74,6 +78,18 @@
         dragHandle(point) {
             var me = this;
 
+            
+            // adjust for DPI & offset
+            let rect = me.elm.getBoundingClientRect();
+            point.x += rect.left;
+            point.y -= rect.top;
+            point.x *= me.dpi;
+            point.y *= me.dpi;
+
+
+            me.pointer.x = point.x;
+            me.pointer.y = point.y;
+
             // ensure minimum separation between the last point and the new one
             if (me.points.length > 0) {
                 let lastPoint = me.points[me.points.length - 1];
@@ -91,6 +107,9 @@
                         y: point.y + me.drawRadius * ((lastPoint.y - point.y) / denominator)
                     }
 
+                    // maybe remove? prevents spikes when doing sharp turns
+                    if (dist(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y) <= 1) return;
+
                     me.points.push(newPoint);
                 }
             } else {
@@ -99,12 +118,28 @@
         }
 
         resize() {
-            // recalculate canvas size
-            this.rect = this.elm.getBoundingClientRect();
+            var me = this;
 
-            this.ctx.resetTransform()
-            this.ctx.canvas.width = this.rect.width;
-            this.ctx.canvas.height = this.rect.height;
+            me.ctx.resetTransform()
+
+            //get DPI
+            me.dpi = window.devicePixelRatio;
+
+            //get CSS height
+            //the + prefix casts it to an integer
+            //the slice method gets rid of "px"
+            let style_height = +getComputedStyle(me.elm).getPropertyValue("height").slice(0, -2);
+            
+            //get CSS width
+            let style_width = +getComputedStyle(me.elm).getPropertyValue("width").slice(0, -2);
+            
+            // calculate new height & width
+            me.height = style_height * me.dpi;
+            me.width = style_width * me.dpi;
+
+            //scale the canvas
+            me.elm.setAttribute('height', me.height);
+            me.elm.setAttribute('width', me.width);
         }
 
         render() {
@@ -113,24 +148,29 @@
             if (me.points.length == 0) return;
 
             // clear context
-            me.ctx.clearRect(0, 0, me.rect.width, me.rect.height);
+            me.ctx.clearRect(0, 0, me.width, me.height);
 
             // draw circle around the last point
             me.ctx.beginPath();
-            me.ctx.lineWidth = 2
-            me.ctx.strokeStyle = "#2D9BF0"
+            me.ctx.lineWidth = 2;
+            me.ctx.strokeStyle = "#2D9BF0";
+            me.ctx.setLineDash([3, 7]);
             me.ctx.arc(me.points[me.points.length - 1].x, me.points[me.points.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
-            me.ctx.stroke()
+            me.ctx.closePath();
+            me.ctx.stroke();
 
             // draw curves between all points
             me.ctx.beginPath()
             me.ctx.lineWidth = me.lineWidth;
             me.ctx.lineCap = me.lineCap;
             me.ctx.strokeStyle = me.strokeStyle;
+            me.ctx.setLineDash(me.lineDash);
 
             if (me.points.length > 2) {
                 // move to the first point
                 me.ctx.moveTo(me.points[0].x, me.points[0].y);
+
+                // curve through the middle points
                 for (var i = 1; i < me.points.length - 2; i++) {
                     var xc = (me.points[i].x + me.points[i + 1].x) / 2;
                     var yc = (me.points[i].y + me.points[i + 1].y) / 2;
@@ -142,7 +182,10 @@
             }
             me.ctx.stroke();
         }
+
     }
 
     return Pen;
 }));
+
+
