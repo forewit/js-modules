@@ -11,9 +11,6 @@
 }(this, function () {
     'use strict';
 
-    const MIN_SEPARATION = 50;
-    const RADIUS = 15;
-
     let dist = function (x1, y1, x2, y2) {
         var a = x2 - x1;
         var b = y2 - y1;
@@ -21,8 +18,10 @@
     }
 
     class Pen {
-        constructor(element) {
+        constructor(element, options) {
             var me = this;
+            if (!options) options = {};
+
 
             // Attributes
             me.points = [];
@@ -30,6 +29,11 @@
             me.ctx = me.elm.getContext("2d");
             me.gestures = new Gestures(me.elm);
             me.rect = me.elm.getBoundingClientRect();
+            me.drawRadius = (options.drawRadius) ? options.drawRadius : 10;
+            me.lineWidth = (options.lineWidth) ? options.lineWidth : 5;
+            me.lineCap = (options.lineCap) ? options.lineCap : "round";
+            me.strokeStyle = (options.strokeStyle) ? options.strokeStyle : "#000000";
+
 
             // bind handlers
             this.dragHandler = this.dragHandle.bind(this);
@@ -76,15 +80,15 @@
 
                 var distance = dist(point.x, point.y, lastPoint.x, lastPoint.y);
 
-                if (distance >= RADIUS) {
+                if (distance >= me.drawRadius) {
                     // see: https://math.stackexchange.com/questions/127613/closest-point-on-circle-edge-from-point-outside-inside-the-circle
                     // A = point
                     // B = lastPoint
-                    // r = RADIUS
+                    // r = drawRadius
                     let denominator = Math.sqrt(point.x * point.x + point.y * point.y - 2 * point.x * lastPoint.x + lastPoint.x * lastPoint.x - 2 * point.y * lastPoint.y + lastPoint.y * lastPoint.y)
                     let newPoint = {
-                        x: point.x + RADIUS * ((lastPoint.x - point.x) / denominator),
-                        y: point.y + RADIUS * ((lastPoint.y - point.y) / denominator)
+                        x: point.x + me.drawRadius * ((lastPoint.x - point.x) / denominator),
+                        y: point.y + me.drawRadius * ((lastPoint.y - point.y) / denominator)
                     }
 
                     me.points.push(newPoint);
@@ -110,13 +114,20 @@
 
             // clear context
             me.ctx.clearRect(0, 0, me.rect.width, me.rect.height);
-            me.ctx.beginPath();
 
             // draw circle around the last point
-            me.ctx.arc(me.points[me.points.length - 1].x, me.points[me.points.length - 1].y, RADIUS, 0, 2 * Math.PI);
-
+            me.ctx.beginPath();
+            me.ctx.lineWidth = 2
+            me.ctx.strokeStyle = "#2D9BF0"
+            me.ctx.arc(me.points[me.points.length - 1].x, me.points[me.points.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
+            me.ctx.stroke()
 
             // draw curves between all points
+            me.ctx.beginPath()
+            me.ctx.lineWidth = me.lineWidth;
+            me.ctx.lineCap = me.lineCap;
+            me.ctx.strokeStyle = me.strokeStyle;
+
             if (me.points.length > 2) {
                 // move to the first point
                 me.ctx.moveTo(me.points[0].x, me.points[0].y);
@@ -129,9 +140,7 @@
                 // curve through the last two points
                 me.ctx.quadraticCurveTo(me.points[i].x, me.points[i].y, me.points[i + 1].x, me.points[i + 1].y);
             }
-
             me.ctx.stroke();
-            //console.log("hi");
         }
     }
 
