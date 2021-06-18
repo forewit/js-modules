@@ -146,6 +146,8 @@
             var me = this;
 
             if (me.points.length == 0) return;
+            let simplified = simplify(me.points, 1);
+            console.log(simplified);
 
             // clear context
             me.ctx.clearRect(0, 0, me.width, me.height);
@@ -155,7 +157,7 @@
             me.ctx.lineWidth = 2;
             me.ctx.strokeStyle = "#2D9BF0";
             me.ctx.setLineDash([1, 3]);
-            me.ctx.arc(me.points[me.points.length - 1].x, me.points[me.points.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
+            me.ctx.arc(simplified[simplified.length - 1].x, simplified[simplified.length - 1].y, me.drawRadius, 0, 2 * Math.PI);
             me.ctx.closePath();
             me.ctx.stroke();
 
@@ -166,19 +168,19 @@
             me.ctx.strokeStyle = me.strokeStyle;
             me.ctx.setLineDash(me.lineDash);
 
-            if (me.points.length > 2) {
+            if (simplified.length > 2) {
                 // move to the first point
-                me.ctx.moveTo(me.points[0].x, me.points[0].y);
+                me.ctx.moveTo(simplified[0].x, simplified[0].y);
 
                 // curve through the middle points
-                for (var i = 1; i < me.points.length - 2; i++) {
-                    var xc = (me.points[i].x + me.points[i + 1].x) / 2;
-                    var yc = (me.points[i].y + me.points[i + 1].y) / 2;
-                    me.ctx.quadraticCurveTo(me.points[i].x, me.points[i].y, xc, yc);
+                for (var i = 1; i < simplified.length - 2; i++) {
+                    var xc = (simplified[i].x + simplified[i + 1].x) / 2;
+                    var yc = (simplified[i].y + simplified[i + 1].y) / 2;
+                    me.ctx.quadraticCurveTo(simplified[i].x, simplified[i].y, xc, yc);
                 }
 
                 // curve through the last two points
-                me.ctx.quadraticCurveTo(me.points[i].x, me.points[i].y, me.points[i + 1].x, me.points[i + 1].y);
+                me.ctx.quadraticCurveTo(simplified[i].x, simplified[i].y, simplified[i + 1].x, simplified[i + 1].y);
             }
             me.ctx.stroke();
         }
