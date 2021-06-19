@@ -98,7 +98,7 @@
                 }
                 newPoint = temp;
 
-                // prevent jagged lines by checking if the distance between points is <= 1
+                // prevent jagged lines by making sure new points aren't too close together
                 if (dist(me.lastPoint.x, me.lastPoint.y, newPoint.x, newPoint.y) <= 0.1) return;
             }
 
