@@ -344,8 +344,6 @@
         }
     
         touchendHandle(e) {
-            document.getElementById('spacer').innerHTML = e.targetTouches[0].identifier;
-
             var me = this;
 
             if (me.dragging &&

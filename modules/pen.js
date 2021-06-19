@@ -109,7 +109,6 @@
 
             me.lastPoint = newPoint;
             me.ctx.stroke();
-            console.log(me.lastPoint);
         }
 
         resize() {
