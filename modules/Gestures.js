@@ -265,8 +265,6 @@
         }
     
         touchstartHandle(e) {
-            document.getElementById('spacer').innerHTML = e.targetTouches[0].identifier;
-
             var me = this;
 
             e.preventDefault();
