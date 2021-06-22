@@ -78,11 +78,11 @@
             this.hypo = undefined;
             this.taps = 0;
             this.lastTouchEndTime = 0;
-            this.touch = { identifier: undefined, x: 0, y: 0 };
             this.mouseMoving = false;
             this.clicks = 0;
             this.mouseupTime = 0;
             this.mouse = { down: false, x: 0, y: 0 };
+            this.touch = { identifier: undefined, x: 0, y: 0 };
             this.callbacks = {};
 
             // clear all callbacks
@@ -170,9 +170,9 @@
     
             me.mouseupTime = new Date();
             me.mouse.down = false;
-    
+            
+            // MOUSE DRAG END DETECTION
             if (me.mouseMoving) {
-                // MOUSE DRAG END DETECTION
                 me.callbacks.mouseDragEnd(me.mouse.x, me.mouse.y);
             }
     

@@ -9,7 +9,7 @@
  * options.placeholderClass ->      adds this css class to the placeholder object (which replaces elm in the DOM while dragging)
  */
 
-(function (root, factory) {
+ (function (root, factory) {
     if (typeof exports === 'object') {
         module.exports = factory();
     } else if (typeof define === 'function' && define.amd) {
@@ -91,9 +91,10 @@
             }
 
             // set initial state
+            let rect = me.elm.getBoundingClientRect();
             me.initial_offset = {
-                x: me.elm.offsetLeft - me.pointer.x,    // adjusted for starting mouse x
-                y: me.elm.offsetTop - me.pointer.y,     // adjusted for starting mouse y
+                x: rect.x - me.pointer.x,    // adjusted for starting mouse x
+                y: rect.y - me.pointer.y,     // adjusted for starting mouse y
             };
         }
 
