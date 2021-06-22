@@ -11,6 +11,29 @@ html, body {
     user-select: none;
 }
 
+.white-rounded {
+    margin: 20px;
+    padding: 8px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 4px 3px 9px 0px rgba(0,0,0, 0.3);
+}
+
+#toolbar-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+#toolbar {
+    display: grid;
+    gap: 10px;
+    grid-auto-flow: column;
+}
+.toolbar-item {
+    width: 40px;
+    height: 40px;
+}
+
 #files {
 	background-color: #fff;
 	border-radius:20px;

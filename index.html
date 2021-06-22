@@ -8,15 +8,26 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
   </head>
   <body>
+    <!-- content -->
+    <div id='toolbar-wrapper' class="white-rounded">
+      <div id="toolbar">
+        <img src="/images/d4.svg" class="toolbar-item"/>			
+        <img src="/images/d6.svg" class="toolbar-item"/>
+        <img src="/images/d10.svg" class="toolbar-item"/>
+      </div>
+    </div>
 
     <canvas id="pen" class="no-select"></canvas>
+
     <div id="files">
         <div class="drop-message">
             Drag & Drop images or click to upload
         </div>
         <div id="image-preview"></div>
     </div>
+
     <div id="draggable"></div>
+
     <div id="gestures"></div>
 
     <!-- modules -->
@@ -25,6 +36,7 @@
     <script src="modules/utils.js"></script>
     <script src="modules/Draggable.js"></script>
     <script src="modules/files.js"></script>
+    <script src="modules/Toolbar.js"></script>
     <script src="modules/pen.js"></script>
 
     <!-- testing script -->

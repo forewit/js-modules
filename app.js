@@ -36,3 +36,6 @@ new files.Dropzone(
 
 // testing pen.js
 new Pen(document.getElementById('pen'));
+
+// testing Toolbar.js
+let toolbar = new Toolbar(document.getElementById("toolbar"), true);
