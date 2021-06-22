@@ -1,36 +1,35 @@
 /**
  * TODO: change from individual callbacks to a listener?
- * TODO: update return from "point" to x and y
  * custom event "gesture" details: {name, x, y}
  * 
  * Gestures.js -- a class to track mouse and touch gestures on an element
  * Initialize by using new Gestures(element)
  *
  * Multiple gesture callbacks can be set using a space-separated string
- * using the following supported options (point = {x, y}):
+ * using the following supported options:
  * 
- *      mouseDragEnd 		-> point
+ *      mouseDragEnd 		-> x, y
  *      blur
- *      wheel 			    -> point, event
- *      click			    -> point
- *      rightClick		    -> point
- *      longClick 		    -> point
- *      doubleClick		    -> point
- *      mouseDragStart		-> point
- *      mouseDragging       -> point
- *      mouseDragEnd		-> point
- *      longpress		    -> point
- *      longpressDragStart	-> point
- *      longpressDragging	-> point
+ *      wheel 			    -> x, y, event
+ *      click			    -> x, y
+ *      rightClick		    -> x, y
+ *      longClick 		    -> x, y
+ *      doubleClick		    -> x, y
+ *      mouseDragStart		-> x, y
+ *      mouseDragging       -> x, y
+ *      mouseDragEnd		-> x, y
+ *      longpress		    -> x, y
+ *      longpressDragStart	-> x, y
+ *      longpressDragging	-> x, y
  *      longpressDragEnd
- *      touchDragStart		-> point
- *      touchDragging		-> point
+ *      touchDragStart		-> x, y
+ *      touchDragging		-> x, y
  *      touchDragEnd
- *      pinchStart		    -> point
- *      pinching		    -> point, scale
+ *      pinchStart		    -> x, y
+ *      pinching		    -> x, y, scale
  *      pinchEnd
- *      tap			        -> point
- *      doubleTap		    -> point
+ *      tap			        -> x, y
+ *      doubleTap		    -> x, y
  * 
  * on(gestures, callback)   Adds a callback to the listed gestures. Example:
  *                              on("click tap", (pointer)=>{console.log(pointer.x, pointer.y)})
@@ -174,7 +173,7 @@
     
             if (me.mouseMoving) {
                 // MOUSE DRAG END DETECTION
-                me.callbacks.mouseDragEnd(me.mouse);
+                me.callbacks.mouseDragEnd(me.mouse.x, me.mouse.y);
             }
     
             me.callbacks.blur();
@@ -185,7 +184,7 @@
             let point = { x: e.clientX, y: e.clientY };
     
             // WHEEL DETECTION
-            this.callbacks.wheel(point, e);
+            this.callbacks.wheel(point.x, point.y, e);
     
             e.preventDefault();
             e.stopPropagation();
@@ -211,7 +210,7 @@
                 if (now - me.mouseupTime >= LONG_CLICK_DELAY && !me.mouseMoving) {
                     window.removeEventListener('mousemove', me.mousemoveHandler);
                     window.removeEventListener('mouseup', me.mouseupHandler);
-                    me.callbacks.longClick(me.mouse);
+                    me.callbacks.longClick(me.mouse.x, me.mouse.y);
                 }
             }, LONG_CLICK_DELAY)
     
@@ -223,7 +222,7 @@
             var me = this;
 
             // MOUSE DRAG START DETECTION
-            if (!me.mouseMoving) me.callbacks.mouseDragStart(me.mouse);
+            if (!me.mouseMoving) me.callbacks.mouseDragStart(me.mouse.x, me.mouse.y);
     
             me.mouseMoving = true;
     
@@ -231,7 +230,7 @@
             me.mouse.y = e.clientY;
 
             // MOUUSE DRAGGING DETECTION
-            me.callbacks.mouseDragging(me.mouse);
+            me.callbacks.mouseDragging(me.mouse.x, me.mouse.y);
         }
     
         mouseupHandle(e) {
@@ -246,21 +245,21 @@
             if (!me.mouseMoving) {
                 // RIGHT CLICK DETECTION
                 if (e.which === 3 || e.button === 2) {
-                    me.callbacks.rightClick(me.mouse);
+                    me.callbacks.rightClick(me.mouse.x, me.mouse.y);
                 } else {
                     // CLICK DETECTION
-                    if (me.clicks == 0) me.callbacks.click(me.mouse);
+                    if (me.clicks == 0) me.callbacks.click(me.mouse.x, me.mouse.y);
     
                     // DOUBLE CLICK DETECTION
                     me.clicks++;
                     window.setTimeout(function () {
-                        if (me.clicks > 1) me.callbacks.doubleClick(me.mouse);
+                        if (me.clicks > 1) me.callbacks.doubleClick(me.mouse.x, me.mouse.y);
                         me.clicks = 0;
                     }, DOUBLE_CLICK_DELAY);
                 }
             } else {
                 // MOUSE DRAG END DETECTION
-                me.callbacks.mouseDragEnd(me.mouse);
+                me.callbacks.mouseDragEnd(me.mouse.x, me.mouse.y);
             }
         }
     
@@ -299,7 +298,7 @@
                     me.hypo = undefined;
                     me.longpressed = true;
     
-                    me.callbacks.longpress(me.touch);
+                    me.callbacks.longpress(me.touch.x, me.touch.y);
                 }
             }, LONG_PRESS_DELAY);
         }
@@ -312,7 +311,7 @@
     
             if (me.dragging) {
                 me.touch = copyTouch(e.targetTouches[0]);
-                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch) : me.callbacks.touchDragging(me.touch);
+                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch.x, me.touch.y) : me.callbacks.touchDragging(me.touch.x, me.touch.y);
                 return;
     
             } else if (!me.longpressed && (me.pinching || e.targetTouches.length > 1)) {
@@ -326,20 +325,21 @@
                 let hypo1 = Math.hypot((me.touch.x - touch2.x), (me.touch.y - touch2.y));
                 if (me.hypo === undefined) {
                     me.hypo = hypo1;
-                    me.callbacks.pinchStart(me.center);
+                    me.callbacks.pinchStart(center.x, center.y);
                 }
     
                 me.pinching = true;
-                me.callbacks.pinching(center, hypo1 / me.hypo);
+                let scale = hypo1 / me.hypo;
+                me.callbacks.pinching(center.x, center.y, scale);
                 me.hypo = hypo1;
                 return;
             } else {
                 me.dragging = true;
-                me.callbacks.touchDragStart(me.touch);
+                me.callbacks.touchDragStart(me.touch.x, me.touch.y);
 
-                (me.longpressed) ?  me.callbacks.longpressDragStart(me.touch) : me.callbacks.touchDragStart(me.touch);
+                (me.longpressed) ?  me.callbacks.longpressDragStart(me.touch.x, me.touch.y) : me.callbacks.touchDragStart(me.touch.x, me.touch.y);
                 me.touch = copyTouch(e.targetTouches[0]);
-                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch) : me.callbacks.touchDragging(me.touch);
+                (me.longpressed) ?  me.callbacks.longpressDragging(me.touch.x, me.touch.y) : me.callbacks.touchDragging(me.touch.x, me.touch.y);
             }
         }
     
@@ -366,12 +366,12 @@
                 me.callbacks.pinchEnd()
             } else if (!me.longpressed) {
                 // TAP DETECTION
-                if (me.taps == 0) me.callbacks.tap(me.touch);
+                if (me.taps == 0) me.callbacks.tap(me.touch.x, me.touch.y);
     
                 // DOUBLE TAP DETECTION
                 me.taps++;
                 window.setTimeout(function () {
-                    if (me.taps > 1) me.callbacks.doubleTap(me.touch);
+                    if (me.taps > 1) me.callbacks.doubleTap(me.touch.x, me.touch.y);
                     me.taps = 0;
                 }, DOUBLE_TAP_DELAY);
             }

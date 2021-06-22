@@ -47,16 +47,16 @@
             me.resize();
         }
 
-        screenToCanvas(point) {
+        screenToCanvas(x, y) {
             // adjust for DPI & offset
             let rect = this.elm.getBoundingClientRect();
             return {
-                x: (point.x + rect.left) * this.dpi,
-                y: (point.y - rect.top) * this.dpi
+                x: (x + rect.left) * this.dpi,
+                y: (y - rect.top) * this.dpi
             }
         }
 
-        startHandle(point) {
+        startHandle(x, y) {
             var me = this;
             
             // clear context
@@ -71,14 +71,14 @@
 
             // start path
             me.ctx.beginPath()
-            me.lastPoint = me.screenToCanvas(point)
+            me.lastPoint = me.screenToCanvas(x, y)
             me.ctx.moveTo(me.lastPoint.x, me.lastPoint.y);
         }
 
-        dragHandle(point) {
+        dragHandle(x, y) {
             var me = this;
 
-            let newPoint = me.screenToCanvas(point);
+            let newPoint = me.screenToCanvas(x, y);
 
 
             // if using a drawing circle
