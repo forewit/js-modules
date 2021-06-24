@@ -2,7 +2,7 @@
  * Valid gestures:
  *      mouseDragEnd 		-> x, y
  *      click			    -> x, y
- *      rightClick		    -> x, y
+ *      right-click		    -> x, y
  *      longClick 		    -> x, y
  *      doubleClick		    -> x, y
  *      mouseDragStart		-> x, y
@@ -49,12 +49,6 @@
         mouse = { down: false, x: 0, y: 0 },
         touches = [];
 
-    let gestureEvent = new CustomEvent("gesture", {
-        detail: {name: "", data: undefined},
-        bubbles: false,
-        cancelable: false
-    })
-
     // ************ HELPER FUNCTIONS **************
     function noop() { };
 
@@ -67,8 +61,11 @@
     }
 
     function dispatchGesture(name, elm, data) {
-        gestureEvent.detail.name = name;
-        gestureEvent.detail.data = data
+        let gestureEvent = new CustomEvent("gesture", {
+            detail: { name: name, data: data },
+            bubbles: false,
+            cancelable: false
+        })
 
         elm.dispatchEvent(gestureEvent);
     }
@@ -95,9 +92,6 @@
     }
 
     function wheelHandler(e) {
-        console.log("WHEEL HANDLER");
-
-        // trigger "wheel" gesture event
         dispatchGesture("wheel", e.target, e);
 
         e.preventDefault();
@@ -105,9 +99,6 @@
     }
 
     function contextmenuHandler(e) {
-        console.log("CONTEXT MENU HANDLER");
-
-        // trigger "right-click" gesture event
         dispatchGesture("right-click", e.target, e)
 
         e.preventDefault();
@@ -115,11 +106,41 @@
     }
 
     function mousedownHandler(e) {
+        mouseMoving = false;
 
+        window.addEventListener('mousemove', mousemoveHandler, { passive: false });
+        window.addEventListener('mouseup', mouseupHandler);
+
+        mouse.down = true;
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+
+        // LONGCLICK DETECTION
+        window.setTimeout(function () {
+            let now = new Date();
+            if (now - mouseupTime >= LONG_CLICK_DELAY && !mouseMoving) {
+                window.removeEventListener('mousemove', mousemoveHandler);
+                window.removeEventListener('mouseup', mouseupHandler);
+
+                dispatchGesture("longclick", e.target, { x: mouse.x, y: mouse.y });
+            }
+        }, LONG_CLICK_DELAY)
+
+        e.preventDefault();
+        e.stopPropagation();
     }
 
     function mousemoveHandler(e) {
+        // MOUSE DRAG START DETECTION
+        if (!mouseMoving) dispatchGesture("mouse-drag-start", e.target, { x: mouse.x, y: mouse.y })
 
+        mouseMoving = true;
+
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+
+        // MOUUSE DRAGGING DETECTION
+        dispatchGesture("mouse-dragging", e.target, { x: mouse.x, y: mouse.y })
     }
     function mouseupHandler(e) {
 
