@@ -6,6 +6,7 @@ keys.start()
 let gesturesElm = document.getElementById('gestures');
 let testGestures = new Gestures(gesturesElm);
 testGestures.on('pinching', ()=>{console.log('pinching'); gesturesElm.innerHTML="pinching"})
+testGestures.on('touchDragStart', ()=>{console.log('touch drag start'); gesturesElm.innerHTML="touch drag start"})
 testGestures.on('touchDragging', ()=>{console.log('touch dragging'); gesturesElm.innerHTML="touch dragging"})
 testGestures.on('touchDragEnd', ()=>{console.log('touch drag end'); gesturesElm.innerHTML="touch drag end"})
 testGestures.on('longpress', ()=>{console.log('longpress'); gesturesElm.innerHTML="longpress"})
@@ -17,6 +18,7 @@ testGestures.on('longClick', ()=>{console.log('long click'); gesturesElm.innerHT
 testGestures.on('rightClick', ()=>{console.log('right click'); gesturesElm.innerHTML="right click"})
 testGestures.on('mouseDragging', ()=>{console.log('mouse dragging'); gesturesElm.innerHTML="mouse dragging"})
 testGestures.on('mouseDragEnd', ()=>{console.log('mouse drag end'); gesturesElm.innerHTML="mouse drag end"})
+testGestures.on('longpressDragStart', ()=>{console.log('longpress drag start'); gesturesElm.innerHTML="longpress drag start"})
 testGestures.on('longpressDragging', ()=>{console.log('longpress dragging'); gesturesElm.innerHTML="longpress dragging"})
 testGestures.on('longpressDragEnd', ()=>{console.log('longpress drag end'); gesturesElm.innerHTML="longpress drag end"})
 testGestures.start();
@@ -46,5 +48,5 @@ let newgesturesElm = document.getElementById("newgestures");
 gestures.track(newgesturesElm);
 
 newgesturesElm.addEventListener("gesture", function(e) {
-    console.log(e.detail);
+    console.log(e.detail.name, e.detail.data);
 });
