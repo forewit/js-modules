@@ -53,8 +53,6 @@
         touch = { identifier: undefined, x: 0, y: 0 };
 
     // ************ HELPER FUNCTIONS **************
-    function noop() { };
-
     function copyTouch(newTouch) {
         return {
             identifier: newTouch.identifier,
