@@ -74,7 +74,6 @@
 
 
     // ************** EVENT HANDLERS **************
-
     function blurHandler(e) {
         // Keep in mind that blur is a window event
         console.log("BLUR HANDLER");
