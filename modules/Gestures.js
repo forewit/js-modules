@@ -34,7 +34,7 @@
     const LONG_PRESS_DELAY = 500;
     const DOUBLE_TAP_DELAY = 300; // reduce to 100 to remove double taps
     const LONG_CLICK_DELAY = 500;
-    const DOUBLE_CLICK_DELAY = 300; // reduce to 100 to remove double taps
+    const DOUBLE_CLICK_DELAY = 300; // reduce to 100 to remove double clicks
 
     // STATE MANAGEMENT
     let trackedElms = [],
