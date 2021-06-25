@@ -110,8 +110,8 @@
     function mousedownHandler(e) {
         mouseMoving = false;
 
-        window.addEventListener('mousemove', mousemoveHandler, { passive: false });
-        window.addEventListener('mouseup', mouseupHandler, { passive: false });
+        window.addEventListener('mousemove', mousemoveHandler);
+        window.addEventListener('mouseup', mouseupHandler);
 
         activeMouseElm = e.target;
         mouse.down = true;
@@ -134,9 +134,6 @@
     }
 
     function mousemoveHandler(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
         // MOUSE DRAG START DETECTION
         if (!mouseMoving) dispatchGesture("mouse-drag-start", activeMouseElm, { x: mouse.x, y: mouse.y })
 
@@ -150,9 +147,6 @@
     }
 
     function mouseupHandler(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
         // remove window event handlers
         window.removeEventListener('mousemove', mousemoveHandler);
         window.removeEventListener('mouseup', mouseupHandler);
@@ -259,7 +253,6 @@
                 dispatchGesture('touch-drag-start', activeTouchElm, { x: touch.x, y: touch.y })
                 touch = copyTouch(e.targetTouches[0]);
                 dispatchGesture('touch-dragging', activeTouchElm, { x: touch.x, y: touch.y })
-
             }
         }
     }
