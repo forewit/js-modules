@@ -61,9 +61,9 @@
         }
     }
 
-    function dispatchGesture(name, elm, data) {
+    function dispatchGesture(elm, name, x, y, data) {
         let event = new CustomEvent("gesture", {
-            detail: { name: name, data: data },
+            detail: { name: name, x: x, y: y, data: data },
             bubbles: false,
             cancelable: false
         })
@@ -92,7 +92,7 @@
     }
 
     function wheelHandler(e) {
-        dispatchGesture("wheel", e.target, { x: e.clientX, y: e.clientY });
+        dispatchGesture(e.target, "wheel", e.clientX, e.clientY)
 
         e.preventDefault();
         e.stopPropagation();
@@ -122,7 +122,7 @@
                 window.removeEventListener('mousemove', mousemoveHandler);
                 window.removeEventListener('mouseup', mouseupHandler);
 
-                dispatchGesture("longclick", activeMouseElm, { x: mouse.x, y: mouse.y });
+                dispatchGesture(activeMouseElm, "longclick", mouse.x, mouse.y,)
             }
         }, LONG_CLICK_DELAY)
 
@@ -132,7 +132,7 @@
 
     function mousemoveHandler(e) {
         // MOUSE DRAG START DETECTION
-        if (!mouseMoving) dispatchGesture("mouse-drag-start", activeMouseElm, { x: mouse.x, y: mouse.y })
+        if (!mouseMoving) dispatchGesture(activeMouseElm, "mouse-drag-start", mouse.x, mouse.y);
 
         mouseMoving = true;
 
@@ -140,7 +140,7 @@
         mouse.y = e.clientY;
 
         // MOUUSE DRAGGING DETECTION
-        dispatchGesture("mouse-dragging", activeMouseElm, { x: mouse.x, y: mouse.y })
+        dispatchGesture(activeMouseElm, "mouse-dragging", mouse.x, mouse.y)
     }
 
     function mouseupHandler(e) {
@@ -154,21 +154,21 @@
         if (!mouseMoving) {
             // RIGHT CLICK DETECTION
             if (e.which === 3 || e.button === 2) {
-                dispatchGesture('right-click', activeMouseElm, { x: mouse.x, y: mouse.y });
+                dispatchGesture(activeMouseElm, "right-click", mouse.x, mouse.y);
             } else {
                 // CLICK DETECTION
-                if (clicks == 0) dispatchGesture('click', activeMouseElm, { x: mouse.x, y: mouse.y })
+                if (clicks == 0) dispatchGesture(activeMouseElm, "click", mouse.x, mouse.y);
 
                 // DOUBLE CLICK DETECTION
                 clicks++;
                 window.setTimeout(function () {
-                    if (clicks > 1) dispatchGesture('double-click', activeMouseElm, { x: mouse.x, y: mouse.y })
+                    if (clicks > 1) dispatchGesture(activeMouseElm, "double-click", mouse.x, mouse.y);
                     clicks = 0;
                 }, DOUBLE_CLICK_DELAY);
             }
         } else {
             // MOUSE DRAG END DETECTION
-            dispatchGesture('mouse-drag-end', activeMouseElm, { x: mouse.x, y: mouse.y });
+            dispatchGesture(activeMouseElm, "mouse-drag-end", mouse.x, mouse.y)
         }
     }
 
@@ -203,7 +203,7 @@
                 hypo = undefined;
                 longpressed = true;
 
-                dispatchGesture('longpress', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "longpress", touch.x, touch.y)
             }
         }, LONG_PRESS_DELAY);
     }
@@ -215,9 +215,9 @@
         if (dragging) {
             touch = copyTouch(e.targetTouches[0]);
             if (longpressed) {
-                dispatchGesture('longpress-dragging', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "longpress-dragging", touch.x, touch.y)
             } else {
-                dispatchGesture("touch-dragging", activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "touch-dragging", touch.x, touch.y);
             }
             return;
         } else if (!longpressed && (pinching || e.targetTouches.length > 1)) {
@@ -231,25 +231,25 @@
             let hypo1 = Math.hypot((touch.x - touch2.x), (touch.y - touch2.y));
             if (hypo === undefined) {
                 hypo = hypo1;
-                dispatchGesture('pinch-start', activeTouchElm, { x: center.x, y: center.y });
+                dispatchGesture(activeTouchElm, "pinch-start", center.x, center.y)
             }
 
             pinching = true;
             let scale = hypo1 / hypo;
-            dispatchGesture('pinching', activeTouchElm, { x: center.x, y: center.y, scale: scale });
+            dispatchGesture(activeTouchElm, "pinching", center.x, center.y, {scale: scale});
             hypo = hypo1;
             return;
         } else {
             dragging = true;
             if (longpressed) {
-                dispatchGesture('longpress-drag-start', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "longpress-drag-start", touch.x, touch.y)
                 touch = copyTouch(e.targetTouches[0]);
-                dispatchGesture('longpress-dragging', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "longpress-dragging", touch.x, touch.y);
 
             } else {
-                dispatchGesture('touch-drag-start', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "touch-drag-start", touch.x, touch.y);
                 touch = copyTouch(e.targetTouches[0]);
-                dispatchGesture('touch-dragging', activeTouchElm, { x: touch.x, y: touch.y })
+                dispatchGesture(activeTouchElm, "touch-dragging", touch.x, touch.y);
             }
         }
     }
@@ -269,22 +269,22 @@
         if (dragging) {
             dragging = false;
             if (longpressed) {
-                dispatchGesture('longpress-drag-end', activeTouchElm, { x: touch.x, y: touch.y });
+                dispatchGesture(activeTouchElm, "longpress-drag-end", touch.x, touch.y);
             } else {
-                dispatchGesture('touch-drag-end', activeTouchElm, { x: touch.x, y: touch.y });
+                dispatchGesture(activeTouchElm, "touch-drag-end", touch.x, touch.y);
             }
         } else if (pinching) {
             pinching = false;
             hypo = undefined;
-            dispatchGesture('pinch-end', activeTouchElm, { x: touch.x, y: touch.y })
+            dispatchGesture(activeTouchElm, "pinch-end", touch.x, touch.y)
         } else if (!longpressed) {
             // TAP DETECTION
-            if (taps == 0) dispatchGesture('tap', activeTouchElm, { x: touch.x, y: touch.y })
+            if (taps == 0) dispatchGesture(activeTouchElm, "tap", touch.x, touch.y);
 
             // DOUBLE TAP DETECTION
             taps++;
             window.setTimeout(function () {
-                if (taps > 1) dispatchGesture('doubletap', activeTouchElm, { x: touch.x, y: touch.y })
+                if (taps > 1) dispatchGesture(activeTouchElm, "doubletap", touch.x, touch.y);
                 taps = 0;
             }, DOUBLE_TAP_DELAY);
         }
