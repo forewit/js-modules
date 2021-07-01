@@ -250,8 +250,8 @@
             }
 
             pinching = true;
-            let scale = hypo1 / hypo;
-            dispatchGesture(activeTouchElm, "pinching", center.x, center.y, { scale: scale, dx: 0, dy: 0 });
+            let zoom = hypo1 / hypo;
+            dispatchGesture(activeTouchElm, "pinching", center.x, center.y, { zoom: zoom, dx: 0, dy: 0 });
             hypo = hypo1;
             return;
         } else {
