@@ -18,7 +18,7 @@ let newgesturesElm = document.getElementById("gestures");
 gestures.track(newgesturesElm);
 
 newgesturesElm.addEventListener("gesture", function(e) {
-    console.log(e.detail.name, e.detail.data);
+    console.log(e.detail.name, e.detail.x, e.detail.y);
 });
 
 // testing pen.js
