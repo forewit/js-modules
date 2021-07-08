@@ -29,7 +29,6 @@
             me.dpi = window.devicePixelRatio;
             me.elm = element;
             me.ctx = me.elm.getContext("2d");
-            me.gestures = new Gestures(me.elm);
             me.drawRadius = (options.drawRadius) ? options.drawRadius : 10;
             me.lineWidth = (options.lineWidth) ? options.lineWidth : 5;
             me.lineCap = (options.lineCap) ? options.lineCap : "round";
@@ -37,13 +36,26 @@
             me.lineDash = (options.lineDash) ? options.lineDash : [];
 
             // bind handlers
-            this.dragHandler = this.dragHandle.bind(this);
-            this.startHandler = this.startHandle.bind(this);
+            me.dragHandler = me.dragHandle.bind(me);
+            me.startHandler = me.startHandle.bind(me);
 
-            // initialize 
-            me.gestures.on('mouseDragStart touchDragStart', me.startHandler);
-            me.gestures.on('mouseDragging touchDragging', me.dragHandler);
-            me.gestures.start();
+            // initialize gestures
+            gestures.track(me.elm);
+            me.elm.addEventListener('gesture', (e) => {
+                switch (e.detail.name) {
+                    case 'mouse-drag-start':
+                    case 'touch-drag-start':
+                        me.startHandle(e.detail.x, e.detail.y);
+                        break;
+                    case 'mouse-dragging':
+                    case 'touch-dragging':
+                        me.dragHandle(e.detail.x, e.detail.y);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
             me.resize();
         }
 
