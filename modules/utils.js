@@ -48,9 +48,6 @@
         };
     };
 
-
-
-
     /**
      * Creates a psudo random unique identifier string
      * 
