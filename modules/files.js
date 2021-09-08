@@ -44,7 +44,7 @@
     }
 
     function loadImage(image, callback) {
-        // container
+        // preview container
         var imgView = document.createElement("div");
         imgView.className = "image-view";
         imagePreviewRegion.appendChild(imgView);
