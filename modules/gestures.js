@@ -38,6 +38,7 @@
 
     // STATE MANAGEMENT
     let trackedElms = [],
+        trackingOptions = [], // same size as trackedElms
         activeMouseElm = undefined,
         mouseMoving = false,
         clicks = 0,
@@ -318,10 +319,17 @@
 
 
     // ****************** EXPORTS ***********************
-    exports.track = function (elm) {
+    exports.track = function (elm, options) {   
+        // initialize options
+        options = options || {};
+        options.preventDefault = options.preventDefault || true;
+        
         // return if element is already being tracked
         for (var i = 0; i < trackedElms.length; i++) {
-            if (elm === trackedElms[i]) return;
+            if (elm === trackedElms[i]) {
+                trackingOptions[i] = options;
+                return;
+            }
         }
 
         // add window event listeners if this is the first tracked element
@@ -331,6 +339,8 @@
 
         // start tracking the element
         trackedElms.push(elm);
+        trackingOptions.push(options);
+        
 
         // add event listeners
         elm.addEventListener('touchstart', touchstartHandler, { passive: false });
@@ -346,6 +356,7 @@
 
                 // stop tracking the element
                 trackedElms.splice(i, 1);
+                trackingOptions.splice(i, 1);
 
                 // remove event listeners
                 elm.removeEventListener('touchstart', touchstartHandler);
