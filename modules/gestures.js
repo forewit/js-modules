@@ -326,9 +326,8 @@
     }
     // ************ END EVENT HANDLERS ************
 
-
-    // ****************** EXPORTS ***********************
-    exports.track = function (elm, options) {
+    // ************ BEGIN PUBLIC METHODS ************
+    function track(elm, options) {
         // initialize options
         options = options || {};
         if (options.preventDefault === undefined) options.preventDefault = true;
@@ -358,7 +357,7 @@
         elm.addEventListener('contextmenu', contextmenuHandler, { passive: false });
     }
 
-    exports.untrack = function (elm) {
+    function untrack(elm) {
         // make sure element is actually being tracked
         for (var i = 0; i < trackedElms.length; i++) {
             if (elm === trackedElms[i]) {
@@ -371,25 +370,32 @@
                 elm.removeEventListener('mousedown', mousedownHandler);
                 elm.removeEventListener('wheel', wheelHandler);
                 elm.removeEventListener('contextmenu', contextmenuHandler);
+
+                // remove window event listeners if everything is untracked
+                if (trackedElms.length == 0) {
+                    window.removeEventListener('blur', blurHandler);
+                }
+                return;
             }
         }
+        throw new Error("Element was not being tracked!");
+    }
 
-        // remove window event listeners if everything is untracked
-        if (trackedElms.length == 0) {
-            window.addEventListener('blur', blurHandler);
+    function untrackAll() {
+        while (trackedElms.length > 0) {
+            untrack(trackedElms[0]);
         }
     }
 
-    exports.untrackAll = function () {
-        for (var i = 0; i < trackedElms.length; i++) {
-            untrack(trackedElms[i]);
-        }
-    }
+    function printTrackedElms() { console.log(trackedElms) };
+    // ************ END PUBLIC METHODS ************
+
+    // ****************** EXPORTS ***********************
+    exports.untrack = untrack;
+    exports.untrackAll = untrackAll;
+    exports.track = track;
+    exports.printTrackedElms = printTrackedElms;
     // ****************** END EXPORTS ********************
-
-    // ************* DEBUGGING ****************
-    exports.printTrackedElms = function () { console.log(trackedElms) };
-    // ****************************************
 
     Object.defineProperty(exports, '__esModule', { value: true });
 })));
