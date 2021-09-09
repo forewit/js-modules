@@ -1,17 +1,16 @@
 /**
- * Valid gestures:
- * 
+ * MOUSE GESTURES -------------------
  * wheel     (see e.detail.event for wheel event details)
  * click
  * middle-click
  * right-click
  * double-click
  * longclick
+ * 
  * left-click-drag-start
  * left-click-dragging
  * left-click-drag-end
  * 
- * TODO:---------------- 
  * middle-click-drag-start
  * middle-click-dragging
  * middle-click-drag-end
@@ -19,20 +18,25 @@
  * right-click-drag-start
  * right-click-dragging
  * right-click-drag-end
- * ---------------------
+ * --------------------------------
  * 
+ * TOUCH GESTURES -------------------
  * tap
  * doubletap
  * longpress
+ * 
  * touch-drag-start
  * touch-dragging
  * touch-drag-end
+ * 
  * longpress-drag-start
  * longpress-dragging
  * longpress-drag-end
+ * 
  * pinch-start
  * pinching
  * pinch-end
+ * --------------------------------
  */
 
 (function (global, factory) {
