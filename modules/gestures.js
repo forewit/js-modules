@@ -331,13 +331,17 @@
         // initialize options
         options = options || {};
         if (options.preventDefault === undefined) options.preventDefault = true;
-        else options.preventDefault = !!options.preventDefault;
+        if (options.touchOnly === undefined) options.touchOnly = false;
+        if (options.mouseOnly === undefined) options.mouseOnly = false;
+        
+        options.preventDefault = !!options.preventDefault;
+        options.touchOnly = !!options.touchOnly;
+        options.mouseOnly = !!options.mouseOnly;
 
         // return if element is already being tracked
         for (var i = 0; i < trackedElms.length; i++) {
             if (elm === trackedElms[i]) {
-                elm.gestureOptions = options;
-                return;
+                throw new Error("Element is already being tracked!");
             }
         }
 
@@ -351,10 +355,14 @@
         elm.gestureOptions = options;
 
         // add event listeners
-        elm.addEventListener('touchstart', touchstartHandler, { passive: false });
-        elm.addEventListener('mousedown', mousedownHandler, { passive: false });
-        elm.addEventListener('wheel', wheelHandler, { passive: false });
-        elm.addEventListener('contextmenu', contextmenuHandler, { passive: false });
+        if (!options.mouseOnly) {
+            elm.addEventListener('touchstart', touchstartHandler, { passive: false });
+        }
+        if (!options.touchOnly) {
+            elm.addEventListener('mousedown', mousedownHandler, { passive: false });
+            elm.addEventListener('wheel', wheelHandler, { passive: false });
+            elm.addEventListener('contextmenu', contextmenuHandler, { passive: false });
+        }
     }
 
     function untrack(elm) {
