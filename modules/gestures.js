@@ -38,7 +38,6 @@
 
     // STATE MANAGEMENT
     let trackedElms = [],
-        trackingOptions = [], // same size as trackedElms
         activeMouseElm = undefined,
         mouseMoving = false,
         clicks = 0,
@@ -332,7 +331,8 @@
     exports.track = function (elm, options) {
         // initialize options
         options = options || {};
-        options.preventDefault = options.preventDefault || true;
+        if (options.preventDefault === undefined) options.preventDefault = true;
+        else options.preventDefault = !!options.preventDefault;
 
         // return if element is already being tracked
         for (var i = 0; i < trackedElms.length; i++) {
