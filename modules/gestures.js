@@ -126,18 +126,16 @@
     function wheelHandler(e) {
         dispatchGesture(e.target, { name: "wheel", x: e.clientX, y: e.clientY, event: e })
 
-        if (e.target.gestureOptions.preventDefault) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+
     }
 
     function contextmenuHandler(e) {
         // right-clicks are handled in the mouseup handler
-        if (e.target.gestureOptions.preventDefault) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+
     }
 
     function mousedownHandler(e) {
@@ -150,7 +148,7 @@
         mouseDown = true;
         lastMouseX = e.clientX;
         lastMouseY = e.clientY;
-        if (!mouseMoving) {mouseButton = e.button;}
+        if (!mouseMoving) { mouseButton = e.button; }
 
         // LONGCLICK DETECTION
         if (mouseButton == 0) {
@@ -165,10 +163,9 @@
             }, LONG_CLICK_DELAY)
         }
 
-        if (e.target.gestureOptions.preventDefault) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+
     }
 
     function mousemoveHandler(e) {
@@ -254,10 +251,9 @@
     }
 
     function touchstartHandler(e) {
-        if (e.target.gestureOptions.preventDefault) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+
 
         // don't handle multiple touches if already tracking a touch
         if (e.targetTouches.length > 1) {
@@ -292,10 +288,9 @@
     }
 
     function touchmoveHandler(e) {
-        if (e.target.gestureOptions.preventDefault) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
+
 
         if (dragging) {
             let lastX = touch.x,
@@ -393,17 +388,7 @@
     // ************ END EVENT HANDLERS ************
 
     // ************ BEGIN PUBLIC METHODS ************
-    function track(elm, options) {
-        // initialize options
-        options = options || {};
-        if (options.preventDefault === undefined) options.preventDefault = true;
-        if (options.touchOnly === undefined) options.touchOnly = false;
-        if (options.mouseOnly === undefined) options.mouseOnly = false;
-
-        options.preventDefault = !!options.preventDefault;
-        options.touchOnly = !!options.touchOnly;
-        options.mouseOnly = !!options.mouseOnly;
-
+    function track(elm) {
         // return if element is already being tracked
         for (var i = 0; i < trackedElms.length; i++) {
             if (elm === trackedElms[i]) {
@@ -418,17 +403,14 @@
 
         // start tracking the element
         trackedElms.push(elm);
-        elm.gestureOptions = options;
 
         // add event listeners
-        if (!options.mouseOnly) {
-            elm.addEventListener('touchstart', touchstartHandler, { passive: false });
-        }
-        if (!options.touchOnly) {
-            elm.addEventListener('mousedown', mousedownHandler, { passive: false });
-            elm.addEventListener('wheel', wheelHandler, { passive: false });
-            elm.addEventListener('contextmenu', contextmenuHandler, { passive: false });
-        }
+        elm.addEventListener('touchstart', touchstartHandler, { passive: false });
+
+        elm.addEventListener('mousedown', mousedownHandler, { passive: false });
+        elm.addEventListener('wheel', wheelHandler, { passive: false });
+        elm.addEventListener('contextmenu', contextmenuHandler, { passive: false });
+
     }
 
     function untrack(elm) {
