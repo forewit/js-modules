@@ -10,9 +10,6 @@
 }(this, (function (exports) {
     'use strict';
 
-    // where images are previewed
-    var imagePreviewRegion = document.getElementById("image-preview");
-
     function preventDefault(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -44,16 +41,8 @@
     }
 
     function loadImage(image, callback) {
-        // preview container
-        var imgView = document.createElement("div");
-        imgView.className = "image-view";
-        imagePreviewRegion.appendChild(imgView);
-
-        // previewing image
-        var img = document.createElement("img");
-        imgView.appendChild(img);
-
         // read the image...
+        var img = new Image()
         var reader = new FileReader();
         reader.onload = function (e) {
             img.src = e.target.result;

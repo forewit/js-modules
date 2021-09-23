@@ -11,7 +11,7 @@ let dropzoneElm = document.getElementById('files');
 new files.Dropzone(
     dropzoneElm, 
     dropzoneElm, 
-    ()=>{console.log('callback')},
+    (img)=>{console.log('callback', img)},
     {hoverClass:"dragover"}
 );
 

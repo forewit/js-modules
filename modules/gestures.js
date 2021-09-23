@@ -83,13 +83,14 @@
     }
 
     function dispatchGesture(elm, event, data) {
-        let event = new CustomEvent("gesture", {
+        data.event = event;
+        let e = new CustomEvent("gesture", {
             detail: data,
             bubbles: false,
             cancelable: false
         })
 
-        elm.dispatchEvent(event);
+        elm.dispatchEvent(e);
     }
     // *********** END HELPER FUNCTIONS ***********
 
