@@ -43,11 +43,11 @@
             gestures.track(me.elm);
             me.elm.addEventListener('gesture', (e) => {
                 switch (e.detail.name) {
-                    case 'mouse-drag-start':
+                    case 'left-click-drag-start':
                     case 'touch-drag-start':
                         me.startHandle(e.detail.x, e.detail.y);
                         break;
-                    case 'mouse-dragging':
+                    case 'left-click-dragging':
                     case 'touch-dragging':
                         me.dragHandle(e.detail.x, e.detail.y);
                         break;
