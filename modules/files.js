@@ -57,7 +57,7 @@
             this.counter = 0; // used to prevent dragleave when hovering over children
             this.dropzone = dropzone;
             this.clickzone = clickzone;
-            this.callback = callback;
+            this.callback = callback; // callback returns the image element
             this.hoverClass = (options.hoverClass) ? options.hoverClass : "";
 
             // open file selector when clicked on the drop region
@@ -170,6 +170,10 @@
             handleFiles(this.fakeInput.files, this.callback);
         }
     }
+
+    // TODO: file requestor --> from local storage or from firease
+    // TODO: file uploader --> to firebase
+    // TODO: integrate drozone with the file requestor
 
     exports.Dropzone = Dropzone;
 
