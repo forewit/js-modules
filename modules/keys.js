@@ -42,7 +42,7 @@
 
     function keydownHandler(e) {
         // include to prevent key events while composing text
-        if (e.isComposing || e.keyCode === 229) { return; }
+        if (e.isComposing || e.keyCode === 229 || e.repeat) { return; }
 
         // add key code to down[]
         down[e.keyCode] = true;

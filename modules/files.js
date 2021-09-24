@@ -10,9 +10,6 @@
 }(this, (function (exports) {
     'use strict';
 
-    // where images are previewed
-    var imagePreviewRegion = document.getElementById("image-preview");
-
     function preventDefault(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -44,16 +41,8 @@
     }
 
     function loadImage(image, callback) {
-        // preview container
-        var imgView = document.createElement("div");
-        imgView.className = "image-view";
-        imagePreviewRegion.appendChild(imgView);
-
-        // previewing image
-        var img = document.createElement("img");
-        imgView.appendChild(img);
-
         // read the image...
+        var img = new Image()
         var reader = new FileReader();
         reader.onload = function (e) {
             img.src = e.target.result;
@@ -68,7 +57,7 @@
             this.counter = 0; // used to prevent dragleave when hovering over children
             this.dropzone = dropzone;
             this.clickzone = clickzone;
-            this.callback = callback;
+            this.callback = callback; // callback returns the image element
             this.hoverClass = (options.hoverClass) ? options.hoverClass : "";
 
             // open file selector when clicked on the drop region
@@ -182,6 +171,15 @@
         }
     }
 
+    function getImageFromURL(url, callback) {
+        var img = new Image();
+        img.onload = function () {
+            callback(img);
+        };
+        img.src = url;
+    }
+
+    exports.getImageFromURL = getImageFromURL;
     exports.Dropzone = Dropzone;
 
     Object.defineProperty(exports, '__esModule', { value: true });
