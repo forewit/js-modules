@@ -1,8 +1,6 @@
 /**
  * Utils is a collection of useful standalone functions:
- * 
- * utils.throttle(func, wait, options)
- */
+*/
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :

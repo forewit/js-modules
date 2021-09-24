@@ -171,10 +171,15 @@
         }
     }
 
-    // TODO: file requestor --> from local storage or from firease
-    // TODO: file uploader --> to firebase
-    // TODO: integrate drozone with the file requestor
+    function getImageFromURL(url, callback) {
+        var img = new Image();
+        img.onload = function () {
+            callback(img);
+        };
+        img.src = url;
+    }
 
+    exports.getImageFromURL = getImageFromURL;
     exports.Dropzone = Dropzone;
 
     Object.defineProperty(exports, '__esModule', { value: true });
