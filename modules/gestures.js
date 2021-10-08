@@ -82,6 +82,10 @@
         }
     }
 
+    function isScrollable(element) {
+        return element.scrollWidth > element.clientWidth || element.scrollHeight > element.clientHeight;
+    }
+
     function dispatchGesture(elm, event, data) {
         data.event = event;
         let e = new CustomEvent("gesture", {
@@ -125,6 +129,9 @@
     }
 
     function wheelHandler(e) {
+        // check if item target is scrollable
+        if (isScrollable(e.target)) return;
+        
         dispatchGesture(this, e, { name: "wheel", x: e.clientX, y: e.clientY, event: e })
 
         e.preventDefault();
