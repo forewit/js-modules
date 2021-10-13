@@ -18,6 +18,10 @@
  * right-click-drag-start
  * right-click-dragging
  * right-click-drag-end
+ * 
+ * longclick-drag-start
+ * longclick-dragging
+ * longclick-drag-end
  * --------------------------------
  * 
  * TOUCH GESTURES -------------------
