@@ -170,7 +170,6 @@
 
         e.preventDefault();
         e.stopPropagation();
-
     }
 
     function mousemoveHandler(e) {
