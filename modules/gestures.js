@@ -254,8 +254,16 @@
     }
 
     function touchstartHandler(e) {
+        // prevent pinch-zoom
+        if (e.touches.length > 1) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
         // return if touch is on an active text field
-        if (document.activeElement == e.target) return;
+        if (document.activeElement == e.target) {
+            return;
+        }
 
         e.preventDefault();
         e.stopPropagation();
